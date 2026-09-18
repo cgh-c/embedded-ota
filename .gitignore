@@ -1,0 +1,12 @@
+# 第三方源码仓库(独立 clone 的,不入本仓库)
+/u-boot/
+
+# 阶段 0 将 clone 的 BSP/SDK 源码
+/100ask_imx6ull-sdk/
+/buildroot/
+
+# 构建产物
+/output/
+*.o
+*.bin
+*.swu
