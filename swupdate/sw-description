@@ -1,28 +1,30 @@
 software = {
     version = "0.1.0";
-    hardware-compatibility = [ "1.0" ];
 
-    /* A 槽:rootfsA,写入 /dev/mmcblk0p1 */
-    slotA = {
-        images: (
-            {
-                filename = "rootfs.ext4.gz";
-                device = "/dev/mmcblk0p1";
-                type = "raw";
-                compressed = true;
-            }
-        );
-    };
+    /* selection = "stable",由 -e stable,<mode> 选择 */
+    stable = {
+        /* A 槽:rootfsA,写入 /dev/mmcblk0p1 */
+        slotA = {
+            images: (
+                {
+                    filename = "rootfs.ext4.gz";
+                    device = "/dev/mmcblk0p1";
+                    type = "raw";
+                    compressed = true;
+                }
+            );
+        };
 
-    /* B 槽:rootfsB,写入 /dev/mmcblk0p2 */
-    slotB = {
-        images: (
-            {
-                filename = "rootfs.ext4.gz";
-                device = "/dev/mmcblk0p2";
-                type = "raw";
-                compressed = true;
-            }
-        );
+        /* B 槽:rootfsB,写入 /dev/mmcblk0p2 */
+        slotB = {
+            images: (
+                {
+                    filename = "rootfs.ext4.gz";
+                    device = "/dev/mmcblk0p2";
+                    type = "raw";
+                    compressed = true;
+                }
+            );
+        };
     };
 };
