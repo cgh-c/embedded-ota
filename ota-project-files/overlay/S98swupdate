@@ -1,0 +1,17 @@
+#!/bin/sh
+# 阶段2:手动触发升级模式,不自动启动 swupdate 常驻进程
+# 需要升级时手动运行:
+#   swupdate -i <url> -e stable,<slotA|slotB> -f /etc/swupdate/swupdate.cfg
+
+case "$1" in
+        start)
+                echo "swupdate: manual mode (not auto-started)"
+                ;;
+        stop|restart|reload)
+                ;;
+        *)
+                echo "Usage: $0 {start|stop|restart}"
+                exit 1
+                ;;
+esac
+exit 0
