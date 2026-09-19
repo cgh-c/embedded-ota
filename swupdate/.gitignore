@@ -1,3 +1,4 @@
-# 大文件不入库
+# 大文件/生成产物不入库
 rootfs.ext4.gz
 *.swu
+sw-description.sig
