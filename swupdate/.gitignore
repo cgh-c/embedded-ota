@@ -1,0 +1,3 @@
+# 大文件不入库
+rootfs.ext4.gz
+*.swu
