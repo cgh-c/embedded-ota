@@ -1,5 +1,5 @@
 software = {
-    version = "0.1.0";
+    version = "2.0.0";
 
     /* selection = "stable",由 -e stable,<mode> 选择 */
     stable = {
@@ -11,7 +11,7 @@ software = {
                     device = "/dev/mmcblk0p1";
                     type = "raw";
                     compressed = true;
-                    sha256 = "71830f6400e220570415f2b0d1e9015ca053127f627ef1cdaffd91e9a63443b7";
+                    sha256 = "78e589b67503555e1f7daedb970893d545332d05140fdb65d30011f050952556";
                 }
             );
         };
@@ -24,7 +24,7 @@ software = {
                     device = "/dev/mmcblk0p2";
                     type = "raw";
                     compressed = true;
-                    sha256 = "71830f6400e220570415f2b0d1e9015ca053127f627ef1cdaffd91e9a63443b7";
+                    sha256 = "78e589b67503555e1f7daedb970893d545332d05140fdb65d30011f050952556";
                 }
             );
         };
