@@ -11,7 +11,7 @@ software = {
                     device = "/dev/mmcblk0p1";
                     type = "raw";
                     compressed = true;
-                    sha256 = "ef81c5c27f2d2b14e58a95d8b2cacd653fcdd40924dba44b033617152070d49a";
+                    sha256 = "71830f6400e220570415f2b0d1e9015ca053127f627ef1cdaffd91e9a63443b7";
                 }
             );
         };
@@ -24,7 +24,7 @@ software = {
                     device = "/dev/mmcblk0p2";
                     type = "raw";
                     compressed = true;
-                    sha256 = "ef81c5c27f2d2b14e58a95d8b2cacd653fcdd40924dba44b033617152070d49a";
+                    sha256 = "71830f6400e220570415f2b0d1e9015ca053127f627ef1cdaffd91e9a63443b7";
                 }
             );
         };

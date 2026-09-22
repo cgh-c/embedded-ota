@@ -1,0 +1,36 @@
+#!/bin/sh
+#
+# Start the network....
+#
+
+# Debian ifupdown needs the /run/network lock directory
+mkdir -p /run/network
+
+case "$1" in
+  start)
+	printf "Starting network: "
+	# 先 up 网口(up 之后才能 DHCP)
+	/sbin/ifconfig eth0 up 2>/dev/null
+	/sbin/ifconfig eth1 up 2>/dev/null
+	# 后台 DHCP(拿不到 IP 会持续重试,直到网线插好、link up)
+	/sbin/udhcpc -b -i eth0 -p /var/run/udhcpc.eth0.pid >/dev/null 2>&1 &
+	/sbin/udhcpc -b -i eth1 -p /var/run/udhcpc.eth1.pid >/dev/null 2>&1 &
+	echo "OK"
+	;;
+  stop)
+	printf "Stopping network: "
+	killall udhcpc 2>/dev/null
+	/sbin/ifdown -a 2>/dev/null
+	echo "OK"
+	;;
+  restart|reload)
+	"$0" stop
+	"$0" start
+	;;
+  *)
+	echo "Usage: $0 {start|stop|restart}"
+	exit 1
+esac
+
+exit $?
+
