@@ -185,7 +185,9 @@ openssl rsa -in swupdate/keys/priv.pem -pubout -out swupdate/keys/public.pem
 # 2. 压缩 rootfs
 gzip -c output/images/rootfs.ext4 > swupdate/rootfs.ext4.gz
 
-# 3. 计算 sha256 写进 sw-description(描述文件里填 rootfs.ext4.gz 的 sha256)
+# 3. 计算 rootfs.ext4.gz 的 sha256,写进 sw-description(slotA/slotB 两处)
+SHA=$(sha256sum swupdate/rootfs.ext4.gz | awk '{print $1}')
+sed -i "s/sha256 = \".*\"/sha256 = \"$SHA\"/g" swupdate/sw-description
 
 # 4. 签名 sw-description
 openssl dgst -sha256 -sign swupdate/keys/priv.pem \
