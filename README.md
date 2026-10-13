@@ -102,19 +102,23 @@ flowchart TD
 
 ---
 
-## 六、构建基础:为什么用 SDK
+## 六、构建基础: SDK
 
-从 SDK 开始,而不是从 NXP 官方 SDK 从零搭建,是因为**它是"现成能跑的 BSP"**:
+**SDK 内容**: 100ask_imx6ull-sdk,含 Linux 4.9.88 内核 + Buildroot 2020.02.x + 交叉工具链 + U-Boot 2017.03。
 
-- 内核(Linux 4.9.88)、Buildroot、交叉工具链、U-Boot 全部打包好
-- 核心外设(LCD、声卡、USB 等)已调通,一条 `make` 就能出能跑的镜像
-- 自己从 NXP 官方 SDK 从零搭,要额外几周做 BSP 移植
+**获取命令**:
 
-**但"能跑"不等于"完全适配你的每块硬件特性"。** 本项目就遇到一个典型案例:100ask 板在 NXP 官方 evk 基础上加了**第二个网口**、并把 PHY 换成需要 GPIO 复位的 LAN8720,而内核 fec 驱动是官方针对"单 PHY"写的,没适配这个改动——所以 eth1 网口起不来。
+```bash
+git clone https://e.coding.net/codebug8/repo.git
+mkdir -p 100ask_imx6ull-sdk && cd 100ask_imx6ull-sdk
+../repo/repo init -u https://gitee.com/weidongshan/manifests.git \
+    -b linux-sdk -m imx6ull/100ask_imx6ull_linux4.9.88_release.xml --no-repo-verify
+../repo/repo sync -j4
+```
 
-这是"官方 baseline vs 定制硬件错位"的典型二次开发问题,也正是本项目"改内核驱动修双网口"这个亮点的来源。
+**自己的东西 vs 官方渠道**:内核、Buildroot、U-Boot、工具链都是开源项目(NXP / Buildroot 社区维护),官方渠道同样能获取。做的是"100ask 板子的适配层":设备树、defconfig、board 配置、rootfs overlay、外设驱动补丁。
 
-SDK 通过 `repo` 从 gitee 拉取(完整命令见"从 0 复现")。
+本项目遇到的 eth1 双网口问题,就是官方内核驱动没覆盖 100ask 定制硬件(加第二个网口 + 换 PHY)的部分,靠本项目改驱动修复。
 
 ---
 
