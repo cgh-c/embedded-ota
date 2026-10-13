@@ -79,15 +79,33 @@ make 100ask_imx6ull_pro_ddr512m_systemV_core_defconfig
 
 ### 3.1 改 A/B 分区(genimage.cfg)
 
-把默认的单分区改成"A/B + data"三分区:
+**改的文件**:`Buildroot_2020.02.x/board/100ask/nxp-imx6ull/genimage.cfg`(文本配置,定义 img 里的分区)
+
+**改前(原始,非 A/B 的三分区)**:
+
+```
+u-boot       offset=1024, 2M   (分区表外)
+rootfs-1     100M, bootable    (无 image,预留)
+rootfs-2     800M, bootable    (rootfs.ext4,真正的系统)
+userdate     50M, FAT(0xC)     (FAT 分区)
+```
+
+**改后(A/B + data)**:
+
+```
+u-boot       offset=1024, 2M   (不变)
+rootfsA      1G, bootable      (rootfs.ext4,A 槽)
+rootfsB      1G                (rootfs.ext4,B 槽)
+data         4G                (ext,数据区)
+```
+
+**操作**:直接编辑这个文件,把分区定义改了(或用项目提供的覆盖),然后重新 `make`:
 
 ```bash
-SDK=100ask_imx6ull-sdk
-BR=$SDK/Buildroot_2020.02.x
-
-# 用项目提供的 genimage.cfg 覆盖(定义 rootfsA 1G + rootfsB 1G + data 4G)
 cp ota-project-files/genimage.cfg $BR/board/100ask/nxp-imx6ull/genimage.cfg
 ```
+
+**核心改动**:把原来"预留 + 系统 + FAT"三个分区,改造成两个**对等的 rootfs 分区(A/B 槽)+ 一个数据区**。两个 rootfs 都指向同一个 rootfs.ext4 镜像,所以一开始 A、B 装的是同一份系统。
 
 **意义**:SD 卡上有了两份可切换的 rootfs,升级才有地方写。
 
@@ -142,7 +160,18 @@ cp -r ota-project-files/overlay-fix/* $BR/board/100ask/nxp-imx6ull/rootfs-overla
 
 **意义**:升级环境和安全公钥都固化进镜像。
 
-> ⚠️ 另外需要在 defconfig 里打开 SWUpdate 包(`BR2_PACKAGE_SWUPDATE=y`)和 openssl,这里略过,详见 `.config`。
+**安装 SWUpdate**(靠 Buildroot 自动编译,不手动装):
+
+1. 在 Buildroot 配置里开启 SWUpdate 包和 openssl(SWUpdate 验签依赖):
+
+```bash
+cd 100ask_imx6ull-sdk/Buildroot_2020.02.x
+make menuconfig        # 图形界面勾选,或直接编辑 defconfig 加下面两行:
+#   BR2_PACKAGE_SWUPDATE=y
+#   BR2_PACKAGE_OPENSSL=y
+```
+
+2. 之后 `make` 时,Buildroot 自动下载 SWUpdate 2019.11 源码、交叉编译、装进 rootfs 的 `/usr/bin/swupdate`。
 
 ---
 
