@@ -153,9 +153,11 @@ make
 │   ├── update.swu             # 升级包(cpio 归档)
 │   └── keys/public.pem        # 公钥(板子上也固化一份)
 ├── ota-project-files/         # 项目改造的源文件(可复现)
-│   ├── genimage.cfg           # A/B 分区配置
-│   ├── mx6ullevk.h            # U-Boot 切槽配置
-│   ├── linux.mk / m4-fix.patch # 编译补丁
+│   ├── genimage.cfg           # SD 卡镜像分区配置(A/B 双分区 + data 区)
+│   ├── mx6ullevk.h            # U-Boot 板级配置,实现 boot_slot 驱动 A/B 启动槽切换
+│   ├── defconfig_hook.py      # Buildroot defconfig 后处理,合并分层配置
+│   ├── linux.mk               # Buildroot 内核构建脚本(适配 i.MX6ULL SDK)
+│   ├── m4-fix.patch           # m4 工具编译兼容补丁(修复 SIGSTKSZ 宏)
 │   ├── eth1-fix/              # 双网口修复(内核驱动 + dts)
 │   ├── overlay/               # rootfs 覆盖层(SWUpdate 配置等)
 │   └── overlay-fix/           # 网络/sshd/reboot 修复
