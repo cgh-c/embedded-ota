@@ -1,7 +1,7 @@
 # 从 0 复现完整流程
 
 > 从"拿到一块板子"到"跑通 OTA 升级"的完整步骤。每步:命令 + 预期结果 + 意义。
-> 假设在 Ubuntu 虚拟机上操作( SDK 的编译环境)。
+> 假设在 Ubuntu 虚拟机上操作(SDK 的编译环境)。
 
 ---
 
@@ -9,18 +9,18 @@
 
 | 硬件 | 说明 |
 |---|---|
-| 开发板 |  100ask imx6ull pro(512MB DDR) |
+| 开发板 | 100ask imx6ull pro(512MB DDR) |
 | SD 卡 | ≥8G(装得下 1G+1G+4G 三个分区 + U-Boot) |
 | 串口线 | 115200,用于看日志、进 U-Boot |
 | 网线 | 升级时传包用 |
 
 ---
 
-## 1. 下载 SDK(内核 + Buildroot + 工具链)
+## 1. 下载SDK(内核 + Buildroot + 工具链)
 
 **是什么**:用 repo 工具,一次性把打包好的整套 SDK 拉下来。
 
-**为什么**:SDK 里已经包含 Linux 4.9.88 内核源码、Buildroot 2020.02.x、交叉工具链、U-Boot 配置,且板子每个外设都调通了。从它开始,省去自己从 NXP 官方 SDK 从零移植 BSP 的几周时间。
+**为什么**:SDK 里已经包含 Linux 4.9.88 内核源码、Buildroot 2020.02.x、交叉工具链、U-Boot 配置,且板子每个外设都调通了。从它开始,可省去从 NXP 官方 SDK 从零移植 BSP 的时间。
 
 ```bash
 # 1. 下载 repo 工具(Google 多仓库管理工具)
@@ -75,7 +75,7 @@ make 100ask_imx6ull_pro_ddr512m_systemV_core_defconfig
 
 ## 3. 集成项目改造(A/B 分区 + 切槽 + 双网口 + 升级环境)
 
-这是本项目对 SDK 做的**四处改造**,把项目提供的文件覆盖到对应位置。
+这是本项目对SDK 做的**四处改造**,把项目提供的文件覆盖到对应位置。
 
 ### 3.1 改 A/B 分区(genimage.cfg)
 
@@ -151,7 +151,7 @@ cp ota-project-files/eth1-fix/100ask_imx6ull-14x14.dts \
 ```bash
 BR=100ask_imx6ull-sdk/Buildroot_2020.02.x
 
-# 覆盖到 imx6ull 的 systemV 覆盖层目录
+# 覆盖到imx6ull 的 systemV 覆盖层目录
 cp -r ota-project-files/overlay/*   $BR/board/100ask/nxp-imx6ull/rootfs-overlay/systemV/
 cp -r ota-project-files/overlay-fix/* $BR/board/100ask/nxp-imx6ull/rootfs-overlay/systemV/
 ```

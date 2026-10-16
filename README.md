@@ -1,6 +1,6 @@
 # i.MX6ULL OTA 远程升级系统
 
-> 基于 **SWUpdate + A/B 双分区 + RSA 签名** 的嵌入式 Linux 远程升级系统,在 100ask imx6ull pro 开发板上实现并验证。
+> 基于 **SWUpdate + A/B 双分区 + RSA 签名** 的嵌入式 Linux 远程升级系统,在100ask imx6ull pro 开发板上实现并验证。
 
 ---
 
@@ -38,8 +38,6 @@ p2   rootfsB 1G  ← B 槽,另一份完整系统
 p3   data    4G  ← 用户数据,升级不动
 ```
 
-**⚠️ 澄清**:U-Boot **不在任何分区里**,它在分区表外的 RAW 区。p3 是 data 分区(存用户数据),和 U-Boot 无关。
-
 **实际占用**:
 
 | 分区 | 分配 | 实际占用 |
@@ -65,7 +63,7 @@ boot_slot=b → 启动 /dev/mmcblk0p2(B 槽)
 | 组件 | 选型 | 作用 |
 |---|---|---|
 | 芯片 | NXP i.MX6ULL(Cortex-A7) | 主控 |
-| 开发板 |  100ask imx6ull pro | 硬件平台 |
+| 开发板 | 100ask imx6ull pro | 硬件平台 |
 | 构建 | Buildroot 2020.02.x | 一键编译 rootfs + 内核 + U-Boot |
 | 内核 | Linux 4.9.88 | 操作系统核心 |
 | 引导 | U-Boot | 开机引导 + A/B 切槽 |
@@ -102,9 +100,9 @@ flowchart TD
 
 ---
 
-## 六、构建基础: SDK
+## 六、构建基础:SDK
 
-**SDK 内容**: 100ask_imx6ull-sdk,含 Linux 4.9.88 内核 + Buildroot 2020.02.x + 交叉工具链 + U-Boot 2017.03。
+**SDK 内容**:100ask_imx6ull-sdk,含 Linux 4.9.88 内核 + Buildroot 2020.02.x + 交叉工具链 + U-Boot 2017.03。
 
 **获取命令**:
 
@@ -116,7 +114,7 @@ mkdir -p 100ask_imx6ull-sdk && cd 100ask_imx6ull-sdk
 ../repo/repo sync -j4
 ```
 
-**自己的东西 vs 官方渠道**:内核、Buildroot、U-Boot、工具链都是开源项目(NXP / Buildroot 社区维护),官方渠道同样能获取。做的是"100ask 板子的适配层":设备树、defconfig、board 配置、rootfs overlay、外设驱动补丁。
+**SDK 与官方渠道的关系**:内核、Buildroot、U-Boot、工具链均为开源项目(NXP / Buildroot 社区维护)，官方渠道同样能获取；SDK 在此基础上提供 "100ask 板子的适配层"：设备树、defconfig、board 配置、rootfs overlay、外设驱动补丁。
 
 本项目遇到的 eth1 双网口问题,就是官方内核驱动没覆盖 100ask 定制硬件(加第二个网口 + 换 PHY)的部分,靠本项目改驱动修复。
 
@@ -129,7 +127,7 @@ mkdir -p 100ask_imx6ull-sdk && cd 100ask_imx6ull-sdk
 核心链路速览:
 
 ```bash
-# 1. 拉 SDK(内核 + Buildroot + 工具链)
+# 1. 拉取 SDK(内核 + Buildroot + 工具链)
 git clone https://e.coding.net/codebug8/repo.git
 mkdir -p 100ask_imx6ull-sdk && cd 100ask_imx6ull-sdk
 ../repo/repo init -u https://gitee.com/weidongshan/manifests.git \
